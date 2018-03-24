@@ -1,0 +1,36 @@
+---
+- name: EX1 template generation
+  hosts: arista,cisco,nxos
+  tasks:
+   - name: Generationg Small configugration
+     template:
+       src: "./TMPLS/ex1.j2"
+       dest: "./CFGS/{{inventory_hostname}}.txt"
+     tags: generate_conf
+
+- name: EX1 configuration push
+  hosts: cisco 
+  tasks:
+   - name: Push the onfigugrations - IOS
+     ios_config:
+       provider: "{{ios_provider}}"
+       src: "./CFGS/{{inventory_hostname}}.txt"
+     tags: push_conf_ios
+
+- name: EX1 configuration push - NXOS
+  hosts: nxos 
+  tasks:
+   - name: Push the onfigugrations
+     nxos_config:
+       provider: "{{nxos_provider}}"
+       src: "./CFGS/{{inventory_hostname}}.txt"
+     tags: push_conf_nxos
+
+- name: EX1 configuration push
+  hosts: arista 
+  tasks:
+   - name: Push the onfigugrations - EOS
+     eos_config:
+       provider: "{{eos_provider}}"
+       src: "./CFGS/{{inventory_hostname}}.txt"
+     tags: push_conf_eos

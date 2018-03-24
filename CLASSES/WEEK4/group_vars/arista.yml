@@ -1,0 +1,26 @@
+---
+default_gw: 10.220.88.1
+
+vlans:
+   - vlan_name: OPS
+     vlan_id: 100
+   - vlan_name: APP
+     vlan_id: 200
+   - vlan_name: PROFILE
+     vlan_id: 300
+   - vlan_name: KODIAK
+     vlan_id: 400
+ 
+global_config:
+   - ip domain-name "bogus.com"
+   - ip name-server vrf default {{name_server1}}
+   - ip name-server vrf default {{name_server2}}
+   - ntp server {{ntp_server1}}
+   - ntp server {{ntp_server2}}
+
+eapi_creds:
+  host: "{{ansible_host}}"
+  password: "{{password}}"
+  username: "{{username}}"
+  transport: eapi
+  validate_certs: False

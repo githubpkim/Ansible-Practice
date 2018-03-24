@@ -1,0 +1,5 @@
+---
+lines:
+   - ip address 1.1.1.1 255.255.255.255
+   - ipv6 address 2001:db8::1/32
+location: SJC2

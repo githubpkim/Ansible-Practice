@@ -1,0 +1,73 @@
+! Command: show running-config
+! device: pynet-sw8 (vEOS, EOS-4.15.4F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+transceiver qsfp default-mode 4x10G
+!
+hostname pynet-sw8
+!
+spanning-tree mode mstp
+!
+aaa authorization exec default local
+!
+no aaa root
+!
+username admin privilege 15 role network-admin secret 5 $1$aM6w809x$tgkc6ZGhcScvELVKVHq3n0
+username admin1 privilege 15 secret 5 $1$7kD0oS/t$wXhtTFwnWwnlPFKWwXoJ70
+username eapi secret 5 $1$zBpvd4C5$LDS6j8PPt6rHikh79Hi46/
+username pyclass privilege 15 secret 5 $1$C3VfUfcO$86t4iqCX60yW.NIR8d2Lh0
+!
+clock timezone America/Los_Angeles
+!
+vlan 300
+   name blue
+!
+vlan 301
+   name blue1
+!
+vlan 302
+   name blue2
+!
+vlan 303
+   name blue3
+!
+vlan 304
+   name blue4
+!
+interface Ethernet1
+   spanning-tree portfast
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Management1
+   shutdown
+!
+!
+interface loopback 77
+ ip address 10.1.77.1/32
+ ipv6 enable
+ ipv6 address 2001:db8:82::11/64
+!
+interface Vlan1
+   ip address 10.220.88.35/24
+!
+ip route 0.0.0.0/0 10.220.88.1
+!
+ip routing
+!
+management api http-commands
+   no shutdown
+!
+!
+end

@@ -1,0 +1,7 @@
+- name: EX1 template generation
+  hosts: arista,cisco,nxos
+  tasks:
+   - name: Generationg Small configugration
+     template:
+       src: "./TMPLS/ex1.j2"
+       dest: "./CFGS/{{inventory_hostname}}.txt"

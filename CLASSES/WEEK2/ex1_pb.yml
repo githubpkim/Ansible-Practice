@@ -1,0 +1,20 @@
+---
+
+- name: IOS FACT Exercise
+  hosts: cisco
+  vars:
+     creds:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+     
+  tasks:
+     - name: IOS FACTS
+       ios_facts:
+          provider: "{{ creds }}"
+       tags: only_facts
+     
+     - name: DISPLAY FACTS
+       debug: 
+          var: ansible_net_serialnum
+     

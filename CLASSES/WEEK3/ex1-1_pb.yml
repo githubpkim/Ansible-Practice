@@ -1,0 +1,12 @@
+---
+
+- name: nxos VLAN 
+  hosts: nxos
+  tasks:
+    - name: NXOS VLAN creation
+      nxos_vlan:
+        vlan_id: "{{item.vlan_id}}"
+        admin_state: "{{item.admin_state}}" 
+        name: "{{item.name}}"
+        provider: "{{ssh_provider}}"
+      with_items: "{{all_vlans}}"

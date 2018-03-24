@@ -1,0 +1,36 @@
+---
+
+- name: IOS Module Running
+  hosts: cisco
+  gather_facts: no
+  vars:
+    creds:
+       host: "{{ansible_host}}"
+       username: "{{username}}"
+       password: "{{password}}"
+
+  tasks:
+    - name: get ios_facts
+      ios_facts:
+         provider: "{{creds}}"
+       
+    - name: Show Arp
+      ios_command:
+         provider: "{{creds}}"
+         commands:
+            - show arp
+      register: arp_output
+     
+    - name: Print Arp info
+      debug:
+        msg: "{{arp_output}}"
+
+    - name: Set new variable
+      set_fact:
+         show_arp_new: "{{arp_output.stdout_lines[0]}}"
+
+    - name: Print Arp of 10.220.88.1
+      debug:
+        msg: "{{item}}"
+      with_items: "{{show_arp_new}}"  # executed first 
+      when: "'10.220.88.1' in item"  # check the each item one by one

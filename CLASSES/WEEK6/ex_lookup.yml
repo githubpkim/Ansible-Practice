@@ -1,0 +1,22 @@
+---
+- hosts: local  #lookup plugin is being used only locally for file type lookup
+  vars:
+    # File lookup
+    contents: "{{ lookup('file', './lookup_test.txt') }}" #generate variable with lookup plug-in
+
+  tasks:
+    - name: Display Paul's statement
+      debug: 
+        msg: "Here is what Paul said: \n\n{{ contents }}"
+
+    - name: Display Paul's statement (more readable)
+      debug:
+       msg: "{{contents.splitlines()}}" #var/msg can be defined like "python" method
+
+    - name: Display Paul's statement with some parsing
+      debug:   # the following 3 kinds of syntaxes are exactly OK
+       msg: "{{contents.splitlines()[2].split()}}" 
+       #msg: 
+       # "{{contents.splitlines()[2].split()}}"
+       #msg: 
+       # - "{{contents.splitlines()[2].split()}}"

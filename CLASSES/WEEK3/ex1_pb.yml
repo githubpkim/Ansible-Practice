@@ -1,0 +1,12 @@
+---
+
+- name: NXOS Exercise-1
+  hosts: nxos  #w/o with_items, all the hosts defined at nxos will be processed one by one
+  tasks:
+     - name: Create VLAN
+       nxos_vlan:
+          provider: "{{nxapi_provider}}" # nxapi-provider is called from group_vars/nxos.yml 
+          vlan_id: "{{item.vlan_id}}"
+          admin_state: "{{item.admin_state}}"
+          name: "{{item.name}}"
+       with_items: "{{all_vlans}}"  # all_vlans is called from group_vars/nxos.yml 

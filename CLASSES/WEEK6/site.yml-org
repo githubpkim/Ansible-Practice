@@ -1,0 +1,19 @@
+---
+
+- name: run Cisco device
+  hosts: pynet-rtr1
+  gather_facts: False
+  roles:   # "tags" is defined in roles/cisco_ios/tasks/main.yml, meaning we can run cisco_ios play only
+     - cisco_ios
+
+- name: run Arista device
+  hosts: pynet-sw7
+  gather_facts: False
+  roles:
+     - arista
+
+- name: run Nexus device
+  hosts: nxos2
+  gather_facts: False
+  roles:
+     - cisco_nxos

@@ -1,0 +1,47 @@
+---
+
+- name: IOS Module running
+  hosts: cisco
+  vars:
+    ssh:
+      host: "{{ansible_host}}" 
+      username: "{{username}}" 
+      password: "{{password}}" 
+
+  tasks:
+     - name: Running IOS FACTS
+       ios_facts:
+          provider: "{{ssh}}"
+       tags: 
+          - tag1
+          - tag2
+          - tag3
+          - tag4
+          - tag5
+
+     - name: Get IP Address
+       debug:
+          msg: "{{ansible_net_all_ipv4_addresses}}"
+       tags:
+          - tag2
+      
+     - name: Get Interface Info
+       debug:
+          msg: "{{ansible_net_interfaces}}"
+       tags:
+          - tag3
+      
+     - name: Get IP Address
+       debug:
+          msg: "Up interface: {{item.key}}"
+       when: "'up' in item.value.lineprotocol"
+       with_dict: "{{ansible_net_interfaces}}"
+       tags:
+          - tag4
+      
+     - name: Get Module info
+       debug:
+          msg: "{{ansible_net_model}}"
+       when: "'881' in ansible_net_model"
+       tags:
+          - tag5

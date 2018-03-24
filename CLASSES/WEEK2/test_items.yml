@@ -1,0 +1,20 @@
+---
+- name: With Testing
+  hosts: local
+  vars:
+    my_devices:  
+      - device1:   # same as [ {device1:NULL,ip_addr: 10.10.10.1, device_type:cisco_ios},.... ] 
+        ip_addr: 10.10.10.1   #make sure that there is no indentation as compared with device1 !! 
+        device_type: cisco_ios   
+      - device2:
+        ip_addr: 10.10.20.1
+        device_type: cisco_ios
+      - device3:
+        ip_addr: 10.10.30.1
+        device_type: juniper_junos
+  tasks:
+    - name: Test with_dict
+      debug:
+        msg: "{{ item.ip_addr }}"  #list item should not have "key" or "value" but direct attribute mapping
+        #msg: "{{ item.value.ip_addr }}"
+      with_items: "{{ my_devices }}" # an item is a list element.

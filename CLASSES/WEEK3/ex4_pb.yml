@@ -1,0 +1,28 @@
+---
+
+- name: NXOS SNMP configuration
+  hosts: nxos
+  tasks:
+     - name: SNMP location
+       nxos_snmp_location:
+          provider: "{{ssh_provider}}" 
+          location: "{{snmp_location}}"
+       notify: wr mem
+       tags:
+          - 1a
+     - name: SNMP contact
+       nxos_snmp_contact:
+          provider: "{{ssh_provider}}" 
+          contact: "{{snmp_contact}}"
+       notify: wr mem
+       tags:
+          - 1b
+  handlers:
+     - name: wr mem
+       nxos_command:
+          provider: "{{ssh_provider}}"
+          timeout: 60
+          commands:
+             copy running start
+       changed_when: True
+       

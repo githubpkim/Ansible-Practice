@@ -1,0 +1,13 @@
+---
+
+- name: Print out variables
+  hosts: [cisco, arista]   # hosts(key) can host multiple values. that's why list is being used.
+#     - cisco
+#     - arista
+  vars_files: [../WEEK2/my_vars.yml] # vars_files(key) can host multiple values. that's why list is being used.
+     #- ../WEEK2/my_vars.yml
+  tasks:
+     - debug: 
+          var: ip_address # "when" and debug "var" should not use "{{ }}" but just variable
+     - debug: 
+          msg: "{{ip_address}}" 

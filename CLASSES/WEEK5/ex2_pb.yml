@@ -1,0 +1,41 @@
+---
+
+- name: exercise 2
+  hosts: nxos
+  tasks:
+    - name: configuratiox - nxos
+      napalm_install_config:
+         provider: "{{nx_provider}}"
+         archive_file: "./ARCHIVE/backup_{{inventory_hostname}}.txt"  
+         config_file: "./CONF/config_{{inventory_hostname}}.txt"  
+         diff_file: "./DIFF/diff_{{inventory_hostname}}.txt"  
+         replace_config: False
+         commit_changes: True
+      tags:
+        - set_conf
+
+    - name: Get facts
+      napalm_get_facts:
+         provider: "{{nx_provider}}"
+         filter:
+           "interfaces_ip"
+      tags:
+        - get_conf
+
+    - name: Get facts # through peel off step 1~4, the actiual ip address is picked up!! Actually use "with_items" twice to get the final element.
+      set_fact:
+         ip_addresses: "{{napalm_interfaces_ip[item]['ipv4']}}" #2)output=> #"10.5.5.2":{"prefix_length": 24}
+      with_items: "{{napalm_interfaces_ip}}" #1)1st with_items .. this will give you the item of "EthernetX/X"
+
+    - name: Debug the variable
+      debug:
+        var: ip_addresses
+
+    - name: Actual IP address pickup 
+      set_fact:
+        device_ip: "{{item}}" #4) set variable of "device_ip" with "item"
+      with_items: "{{ip_addresses}}" #3)2nd with_items...this will provide item of "10.5.5.2" or "10.5.5.1"
+
+    - name: Checking the IP setup
+      assert:
+         that: "device_ip in ['10.5.5.1','10.5.5.2']"

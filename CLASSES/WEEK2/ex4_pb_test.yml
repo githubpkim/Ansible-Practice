@@ -1,0 +1,31 @@
+--- 
+
+- name: ARP and MAC on eos
+  hosts: pynet-sw7
+  vars:
+     eapi:            # dictionary i.e. key:value type needs to be always dictionary. if not, list is required
+         host: "{{ansible_host}}"
+         username: "{{username}}"
+         password: "{{password}}"
+         validate_certs: no
+         use_ssl: True
+         transport: eapi
+  tasks:
+    - name: eos-show arp
+      eos_command: 
+        provider: "{{eapi}}" #looking for the value of *eapi* which is key:value(dictionary) of host.username,etc 
+        commands: show arp
+      register: show_arp # the executed output of "show arp" is registered to the variable named "show_arp"
+      tags: 
+        - 1a
+        - 1b
+        - 1c
+        - 1d
+
+    - name: print arp_entries
+      debug: 
+        msg: "The MAC of gateway is : {{item.hwAddress}}"
+      with_items: "{{show_arp.stdout[0].ipV4Neighbors}}" # w/o set_fact, still we can run with_items like this. Compare to ex4_pb.yml. w/ set_fact, make the variable a bit simpler with additional step.
+      when: "item.address == '10.220.88.1'"
+      tags: 
+        - 1d

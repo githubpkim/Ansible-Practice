@@ -1,0 +1,33 @@
+---
+
+- name: NXOS practice
+  hosts: 
+    - nxos1
+    - nxos2
+  gather_facts: False
+
+  tasks:
+    - name: SNMP Configuration 
+      nxos_snmp_location: 
+             provider: "{{ssh_provider}}"
+             location: AMS1
+             state: present
+      notify:
+         - wr mem 
+
+    - name: SNMP Contact
+      nxos_snmp_contact: 
+             provider: "{{ssh_provider}}"
+             contact: neteng@amobee.com
+             state: present
+      notify:
+         - wr mem 
+
+  handlers:
+     - name: Save running configuration
+       nxos_command:
+          commands:
+             - copy run start
+          provider: "{{ssh_provider}}"
+          timeout: 120
+       listen: wr mem

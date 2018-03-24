@@ -1,0 +1,36 @@
+---
+
+- name: NXOS Exercise-1
+  hosts: nxos  #w/o with_items, all the hosts defined at nxos will be processed one by one
+  tasks:
+     - name: Create VLAN
+       nxos_vlan:
+          provider: "{{nxapi_provider}}" # nxapi-provider is called from group_vars/nxos.yml 
+          vlan_id: "{{item.vlan_id}}"
+          admin_state: "{{item.admin_state}}"
+          name: "{{item.name}}"
+       with_items: "{{all_vlans}}"  # all_vlans is called from group_vars/nxos.yml 
+       tags:
+          - 1a
+
+     - name: Assign IP address
+       nxos_ip_interface:
+          provider: "{{ssh_provider}}" # nxapi-provider is called from group_vars/nxos.yml 
+          interface: "{{item.interface}}"
+          addr: "{{item.addr}}"
+          mask: "{{item.mask}}"
+          version: "{{item.version}}"
+          state: "{{item.state}}"
+       with_items: "{{ip_assignment}}"  # all_vlans is called from group_vars/nxos.yml 
+       notify: wr mem
+       tags:
+          - 1b
+
+  handlers:
+     - name: wr mem
+       nxos_command:
+         provider: "{{ssh_provider}}"
+         timeout: 60
+         commands: 
+            - copy run startup 
+       changed_when: True

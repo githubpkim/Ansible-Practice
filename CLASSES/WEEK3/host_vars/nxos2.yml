@@ -1,0 +1,25 @@
+---
+unique_vlans:
+    - vlan_id: 305
+      name: orange
+      admin_state: up
+    - vlan_id: 306
+      name: gray
+      admin_state: up
+
+ip_assignment:
+    - interface: Ethernet2/2
+      version: v4
+      other_end_ip: 10.109.24.1
+      state: present
+      addr: 10.109.24.2
+      mask: 24
+    - interface: Ethernet2/2
+      version: v6
+      other_end_ip: 2001:db8:8241:200c::1
+      state: present
+      addr: 2001:db8:8241:200c::2
+      mask: 64
+
+snmp_location: SJC2 datacenter
+snmp_contact: neteng@amobee.com

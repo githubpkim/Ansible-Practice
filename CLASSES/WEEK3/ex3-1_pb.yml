@@ -1,0 +1,17 @@
+---
+
+- name: NXOS test
+  hosts: nxos
+  gather_facts: False
+
+  tasks:
+    - name: PING test
+      nxos_ping:
+        provider: "{{ssh_provider}}"
+        dest: "{{item.other_end_ip}}" 
+      with_items:  "{{ip_assignment}}" 
+      register: ping_output
+   
+    - name: Debug the output
+      debug:
+        var: ping_output.results

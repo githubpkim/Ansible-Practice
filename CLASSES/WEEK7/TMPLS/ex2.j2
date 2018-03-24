@@ -1,0 +1,7 @@
+interface {{ipv6_interface}}
+  ipv6 address 2001:db8:8888:200c::1/64      
+  no shutdown
+
+router bgp {{bgp_as}}
+  neighbor 2001:db8:7777:200c::2 remote-as 22
+    address-family ipv6 unicast

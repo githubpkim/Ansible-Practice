@@ -1,0 +1,12 @@
+---
+- name: EOS Config
+  hosts: arista
+ 
+  tasks:
+    - name: Create VLANs
+      eos_config:
+         provider: "{{eapi_creds}}"
+         parents: vlan {{item.vlan_id}}
+         lines:
+            - name {{item.vlan_name}} 
+      with_items: "{{vlans}}"

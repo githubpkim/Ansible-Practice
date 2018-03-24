@@ -1,0 +1,5 @@
+---
+- hosts: cisco
+  tasks:
+    - name: playbook for ping
+      ping:

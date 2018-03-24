@@ -1,0 +1,6 @@
+ip name-server vrf default 8.8.8.8
+ip name-server vrf default 8.8.4.4
+ip domain-name bogus1.com
+ntp server 130.126.24.24
+ntp server 152.2.21.1
+

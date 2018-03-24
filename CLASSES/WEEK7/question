@@ -1,0 +1,4 @@
+environment: 
+    we have just 2 vendors at ToR switches. 
+    We change the configuration of DNS/NTP/some small lines occasionally.
+    is it better to use ansible-core  or napalm  ?

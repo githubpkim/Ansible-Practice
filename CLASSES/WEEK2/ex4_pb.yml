@@ -1,0 +1,44 @@
+--- 
+
+- name: ARP and MAC on eos
+  hosts: pynet-sw7
+  vars:
+     eapi:            # dictionary i.e. key:value type needs to be always dictionary. if not, list is required
+         host: "{{ansible_host}}"
+         username: "{{username}}"
+         password: "{{password}}"
+         validate_certs: no
+         use_ssl: True
+         transport: eapi
+  tasks:
+    - name: eos-show arp
+      eos_command: 
+        provider: "{{eapi}}" #looking for the value of *eapi* which is key:value(dictionary) of host.username,etc 
+        commands: show arp
+      register: show_arp # the executed output of "show arp" is registered to the variable named "show_arp"
+      tags: 
+        - 1a
+        - 1b
+        - 1c
+        - 1d
+
+    - name: print show arp
+      debug: 
+        var: show_arp  #check the value of the variable. With the printing, the details of value hierachy(list/dict mixed) can be read.
+      tags: 
+        - 1b
+
+    - name: set fact for arp
+      set_fact:    #create a value mapped variable. This variable will be available to subsequent plays during an ansible-playbook run.
+        arp_entries: "{{show_arp.stdout[0].ipV4Neighbors}}" #show_arp is dictionary which has the *key* named "stdout" which is the list which has the *key* named "ipV4Neighbors".
+      tags: 
+        - 1c
+        - 1d
+
+    - name: print arp_entries
+      debug: 
+        msg: "The MAC of gateway is : {{item.hwAddress}}"
+      with_items: "{{arp_entries}}"
+      when: "item.address == '10.220.88.1'"
+      tags: 
+        - 1d

@@ -1,0 +1,11 @@
+---
+ssh_provider:
+  username: "{{username}}"
+  password: "{{password}}"
+  host: "{{ansible_host}}"
+
+domain_name: bogus.com
+name_server1: 8.8.7.7
+name_server2: 8.8.9.9
+ntp_server1: 130.126.24.24
+ntp_server2: 152.2.21.1

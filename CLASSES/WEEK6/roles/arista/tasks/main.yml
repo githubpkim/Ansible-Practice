@@ -1,0 +1,5 @@
+- eos_config:
+     provider: "{{ creds_eapi }}"
+     lines: "{{ global_config }}"
+  tags:
+    - arista

@@ -1,0 +1,13 @@
+---
+
+- name: Exec 4
+  hosts: pynet-sw8 
+  tasks:
+   - name: replacement of whole configuration
+     napalm_install_config:
+       provider: "{{eapi_creds}}"
+       archive_file: "./ARCHIVE/backup_{{inventory_hostname}}.txt"
+       config_file: "./CONF/config_{{inventory_hostname}}.txt"
+       diff_file: "./DIFF/diff_{{inventory_hostname}}.txt"
+       replace_config: True
+       commit_changes: False

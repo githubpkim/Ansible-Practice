@@ -1,0 +1,56 @@
+---
+
+- name: EOS EXAMPLE
+  hosts: arista
+  vars:
+     eapi_creds:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        transport: eapi
+        validate_certs: no
+
+     ssh_creds:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        transport: cli
+        timeout: 60
+
+  gather_facts: False
+  tasks:
+     - name: EOS FACTS CHECKING
+       eos_facts:
+          provider: "{{ ssh_creds }}"
+       tags: 
+        - "facts_only"
+        - "ip_address"
+
+     - debug:
+          var: ansible_net_all_ipv4_addresses
+       tags: 
+        - ip_address
+     
+     - name: EAPI CREDS
+       eos_command:
+          provider: "{{ eapi_creds }}"
+          commands: ["show arp"] 
+       register: output1
+       tags: [eos_command]
+
+     - name: EAPI OUTPUT
+       debug:
+          var: output1
+       tags: [eos_command]
+
+     - name: SSH CREDS 
+       eos_command:
+          provider: "{{ ssh_creds }}"
+          commands: ["show arp"] 
+       register: output
+       tags: [eos_command]
+
+     - name: SSH OUTPUT
+       debug:
+          var: output
+       tags: [eos_command]

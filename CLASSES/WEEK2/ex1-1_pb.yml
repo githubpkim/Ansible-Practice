@@ -1,0 +1,24 @@
+---
+
+- name: IOS Running
+  hosts: cisco
+  vars:
+    ssh:
+       port: 22
+       host: "{{ansible_host}}"
+       username: "{{username}}"
+       password: "{{password}}"
+
+  tasks:
+    - name: Get IOS FACTS
+      ios_facts:
+        provider: "{{ssh}}"
+      tags:
+        - get_facts
+        - serial_num
+ 
+    - name: Get Serial Num
+      debug:
+         msg: "{{ansible_net_serialnum }}"  
+      tags: 
+        - serial_num

@@ -1,0 +1,9 @@
+---
+- name: IOS SNMP Config
+  hosts: cisco
+ 
+  tasks:
+    - name: Cisco SNMP Config
+      ios_config:
+         provider: "{{ssh_provider}}"
+         lines: "{{snmp_config}}"

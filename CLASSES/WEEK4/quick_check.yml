@@ -1,0 +1,15 @@
+---
+
+- name: Quick Check - NXOS inventory
+  hosts: nxos
+  
+  tasks:
+     - name: Gather NX-OS facts
+       nxos_facts:
+#          host: "{{inventory_hostname}}"
+          provider: "{{nxapi_provider}}"
+       register: nxos_info
+#
+#     - name: Print NX-OS Facts
+#       debug: 
+#         var: nxos_info

@@ -1,0 +1,4 @@
+{# make sure how the variable "napalm_mac_address_table" is written  #} 
+{% for mac in napalm_mac_address_table %} 
+{{mac.mac}} : {{mac.interface}}
+{%endfor%}

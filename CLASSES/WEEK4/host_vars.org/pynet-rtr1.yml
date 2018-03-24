@@ -1,0 +1,5 @@
+---
+ssh_provider:
+  username: "{{username}}"
+  password: "{{password}}"
+  host: "{{ansible_host}}"

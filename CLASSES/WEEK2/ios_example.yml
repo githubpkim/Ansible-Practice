@@ -1,0 +1,35 @@
+---
+
+- name: IOS EXAMPLE
+  hosts: "cisco"
+  vars:
+     creds:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+  tasks:
+     - name: IOS FACTS CHECKING
+       ios_facts:
+          provider: "{{ creds }}"
+       tags: facts_only
+
+     - debug:
+          var: 
+            "ansible_net_model"
+       tags: facts_only
+     
+     - ios_command:
+          provider: "{{ creds }}"
+          commands: "show ip int brief"
+       register: "output"
+       tags: "check_int"
+
+     - name: debug message output 
+       debug:
+          msg: "{{ output.stdout_lines[0][5] }}" 
+       tags: "check_int"
+
+     - name: debug var output
+       debug:
+          var: "output.stdout_lines[0][5]"
+       tags: "check_int"

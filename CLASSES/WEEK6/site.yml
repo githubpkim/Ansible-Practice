@@ -1,0 +1,12 @@
+---
+
+- name: run Cisco device
+  hosts: pynet-rtr1:pynet-sw7:nxos2
+  gather_facts: False
+  roles:   # "tags" is defined in roles/cisco_ios/tasks/main.yml, meaning we can run cisco_ios play only
+     - role: "cisco_ios"
+       when: platform == "ios"
+     - role: "arista"
+       when: platform == "arista"
+     - role: "cisco_nxos"
+       when: platform == "nxos"

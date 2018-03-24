@@ -1,0 +1,23 @@
+---
+
+- name: 1st play
+  hosts: cisco  #supposed to be inventory_hostname or group name, NOT ansible_host
+  
+  tasks:
+    - name: napalm_get_facts from cisco
+      napalm_get_facts:  #only napalm_get_facts has "filter" as an option
+         provider: "{{creds}}"
+         filter:
+           "lldp_neighbors"  #just filter not variable. the return value can be used at set_fact below. 
+
+- name: 2nd play
+  hosts: cisco  
+  tasks:
+    - name: set fact test
+      set_fact:
+         lldp_nei_info: "{{napalm_lldp_neighbors}}" #Once we have get_facts, other play also can use the variables from it
+        
+    - name: Display LLDP info
+      debug:
+        msg: 
+          "{{lldp_nei_info}}"

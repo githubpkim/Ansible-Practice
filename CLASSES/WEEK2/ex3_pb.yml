@@ -1,0 +1,34 @@
+---
+
+- name: IOS EXERCISE
+  hosts: cisco
+  vars:
+     creds:
+          host: "{{ ansible_host }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+        
+  tasks:
+    - name: IOS command running
+      ios_command:
+        commands: show arp
+        provider: "{{ creds }}"
+      register: show_arp    # The output of the module will be registered w/ varialble named *show_arp*
+
+    - name: show arp running
+      debug:
+        var: show_arp
+
+    - name: show arp Set_fact
+      set_fact:   #create new variable w/ value assignment
+        show_arp_new: "{{show_arp.stdout_lines[0]}}"  
+
+    - name: Print show_arp_new
+      debug:
+        var: show_arp_new  # *var* just with plain variable , *msg* needs "{{  }}" if including  variable
+
+    - name: Print only 10.220.88.1
+      debug:
+        var: item
+      with_items: "{{show_arp_new}}"
+      when: "'10.220.88.1' in item"

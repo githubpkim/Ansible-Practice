@@ -1,0 +1,46 @@
+---
+
+- name: Testing When
+  hosts: localhost
+  vars:
+     version: "IOS 12.6.02" # " " or no " " is not matter. Since Yaml only understand list or dictionary, element after key(=version) is considered as the value implicitly. However it's good idea to have pythonic syntex meaning having " " at valye is better idea.
+     pkim: "test123"
+  
+  tasks:
+    - name: When is True
+      debug:
+        msg: "When is True"
+      when: True
+
+    - name: When is False
+      debug:
+        msg: "When is True"
+      when: False
+
+    - name: When is compared
+      debug:
+        msg: "When is compared as same"
+      when: pkim = "test123"  # must have " " enclosed the value. make sure that "when" and debug "var" follows the rule of  python syntax 
+      tags: [compare]
+
+    - name: Variable is present
+      debug:
+        var: version
+      when: "'IOS' in version"
+      tags: [version]
+
+    - name: Variable is not present
+      debug:
+        msg: "Variable is not defined"
+      when: checking is not defined
+
+    - name: run false cmd
+      command: /bin/false
+      ignore_errors: True
+      register: output
+
+    - name: debug with false
+      debug: 
+        msg: "Hello World"
+      when: output|succeeded
+

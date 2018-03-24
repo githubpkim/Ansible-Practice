@@ -1,0 +1,35 @@
+---
+
+- name: EX6-1 PB
+  hosts: cisco
+  vars: 
+     file_name: "./{{inventory_hostname}}_version.txt"
+  
+  tasks:
+    - name: Copy Show Version
+      ios_command:
+        provider: "{{ios_provider}}"
+        commands:
+           - "show version"
+      register: sh_ver
+
+    - name: Display sh_ver variable
+      debug:
+        var: "sh_ver.stdout_lines[0][0].split()[7]"
+
+    - name: Save output to version files
+      copy:
+        content: "{{sh_ver.stdout_lines[0][0].split()[7].split(',')[0]}}"
+        dest: "{{file_name}}"
+
+    - name: lookup type - file
+      set_fact:  #the Syntax of first 2 lines good but that of last 2 not working 
+         sh_ver_lookup: "{{lookup('file',file_name)}}" #file_name is variable
+         #sh_ver_lookup: "{{lookup('file','{{file_name}}')}}"
+
+         #sh_ver_lookup: "{{lookup('file','file_name')}}"
+         #sh_ver_lookup: "{{lookup('file',{{file_name}})}}"
+
+    - name: Read sh_ver files saved
+      debug:
+         var: sh_ver_lookup

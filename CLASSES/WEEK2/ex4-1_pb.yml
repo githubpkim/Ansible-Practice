@@ -1,0 +1,29 @@
+---
+
+- name: EOS Module running
+  hosts: pynet-sw7
+  vars:
+    eapi:
+       host: "{{ansible_host}}"
+       transport: eapi
+       validate_certs: no
+       username: "{{username}}"
+       password: "{{password}}"
+
+  tasks:
+    - name: Show ARP
+      eos_command:
+         provider: "{{eapi}}"
+         commands:
+            - show arp
+      register: arp_output
+
+    - name: set varlable for  MAC of gateway
+      set_fact:
+         gw_mac: "{{item.hwAddress}}"
+      when: item.address == '10.220.88.1'
+      with_items: "{{arp_output.stdout_lines[0].ipV4Neighbors}}"
+
+    - name: Print varlable for  MAC of gateway
+      debug:
+         msg: "The default gateway's MAC : {{gw_mac}}"

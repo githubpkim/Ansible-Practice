@@ -1,0 +1,53 @@
+---
+
+- name: NTP configuration check
+  hosts: nxos
+  vars:
+    ntp_servers:
+      - ntp server 130.126.24.24
+      - ntp server 152.2.21.1
+ 
+  tasks:
+    - name: ntp server configutration
+      nxos_config:
+         provider: "{{ssh_provider}}"
+         lines:
+           - ntp server 10.1.1.5
+           - ntp server 10.1.1.6
+      tags:
+        - ntp_config
+   
+    - name: set variable - ntp server 
+      nxos_command:
+         provider: "{{ssh_provider}}"
+         commands:
+           - "show run | inc ntp"
+      register: sh_ntp
+      tags:
+        - get_ntp
+   
+    - name: set variable for currnet ntp servers
+      set_fact:
+         current_ntp: "{{sh_ntp.stdout_lines[0]}}"
+      tags:
+        - get_ntp
+
+    - name: set variable for extra ntp servers
+      set_fact:
+         extra_ntp: "{{current_ntp | difference(ntp_servers)}}" # the variable, extra_ntp will be called at remove_ntp.j2 file. basically do set_fact for target items to be handled and utilize it with J2 template. It seems very typical way to configure.
+      tags:
+        - get_ntp
+
+    - name: create commands to remove the bad ntp servers
+      set_fact:
+         remove_ntp: "{{lookup('template', './remove_ntp.j2') | from_yaml}}" # 1) impact of "from_yaml" is significant!! it’s going to convert that into a data structure inside of this Ansible Playbook. That's why it is being read line by line instead of a big string. In this case, the template's destiation would be "variable" to be set, not like normal file !!
+      tags:
+        - get_ntp
+
+    - name: remove the unnecessary ntp servers
+      nxos_config:
+         provider: "{{ssh_provider}}"
+         lines:
+           - "{{remove_ntp}}"  # since it is a structured format created by 1), this single variable(remove_ntp) can be simulated like multiple lines. No "with_items" is required.
+      tags:
+        - get_ntp

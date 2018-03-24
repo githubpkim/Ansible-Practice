@@ -1,0 +1,7 @@
+---
+
+- name: display ip address
+  hosts: cisco
+  
+  tasks:
+     - ping:

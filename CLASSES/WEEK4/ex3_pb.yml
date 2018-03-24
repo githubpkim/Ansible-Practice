@@ -1,0 +1,34 @@
+---
+- name: IOS Config
+  hosts: pynet-rtr1
+ 
+  tasks:
+    - name: Cisco Lookup Interface
+      ios_config:
+         provider: "{{ssh_provider}}"
+         parents: int loopback0
+         lines: "{{lines}}"
+      tags:
+         - ios
+
+- name: EOS Config
+  hosts: pynet-sw5
+  tasks:
+    - name: Arista Lookup Interface
+      ios_config:
+         provider: "{{ssh_provider}}"
+         parents: int loopback0
+         lines: "{{lines}}"
+      tags:
+         - eos
+
+- name: NXOS Config
+  hosts: nxos1
+  tasks:
+    - name: NXOS Lookup Interface
+      ios_config:
+         provider: "{{ssh_provider}}"
+         parents: int loopback0
+         lines: "{{lines}}"
+      tags:
+         - nxos

@@ -1,0 +1,38 @@
+---
+
+- name: LLDP at Cisco routers
+  hosts: cisco  #supposed to be inventory_hostname or group name, NOT ansible_host
+  
+  tasks:
+    - name: napalm_get_facts from cisco
+      napalm_get_facts:  #only napalm_get_facts has "filter" as an option
+         provider: "{{creds}}"
+         filter:
+           "lldp_neighbors"
+        
+    - name: set fact - lldp neighbor
+      set_fact:
+         lldp_nei_info: "{{napalm_lldp_neighbors}}" #Once we have get_facts, we can see the output
+        
+    - name: Display LLDP info
+      debug:
+        msg: 
+          "{{lldp_nei_info}}"
+
+    - name: set variable for hostname
+      set_fact:
+        hostname: "{{lldp_nei_info[item][0]['hostname']}}"
+      with_items: "{{lldp_nei_info}}"
+
+#    - name: Display LLDP info - hostname
+#      debug:
+#        msg: 
+#          "{{lldp_nei_info[item][0]['hostname']}}"
+#      with_items: "{{lldp_nei_info}}"
+
+    - name: check the existence
+      assert:
+        msg: 
+          "No, twb-sf-hpsw1 is not lldp neighbor"
+        that: "'twb-sf-hpsw1' == hostname"
+

@@ -1,0 +1,1 @@
+apply merge configuration seems not itempotent. Always returned "changd" when running OK

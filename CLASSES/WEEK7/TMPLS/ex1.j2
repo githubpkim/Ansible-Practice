@@ -1,0 +1,22 @@
+{% if platform == 'ios' %}
+ip name-server 8.8.8.8
+ip name-server 8.8.4.4
+ip domain name bogus1.com
+ip ntp-server 130.126.24.24
+ip ntp-server 152.2.21.1
+
+{% elif platform == 'eos' %}
+ip name-server vrf default 8.8.8.8
+ip name-server vrf default 8.8.4.4
+ip domain-name bogus1.com
+ntp server 130.126.24.24
+ntp server 152.2.21.1
+
+{% else %}
+ip name-server 8.8.8.8
+ip name-server 8.8.4.4
+ip domain-name: bogus1.com
+ntp server: 130.126.24.24
+ntp server: 152.2.21.1
+
+{% endif %}

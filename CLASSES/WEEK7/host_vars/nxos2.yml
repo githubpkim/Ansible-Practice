@@ -1,0 +1,4 @@
+---
+ipv6_interface: "Ethernet2/4"
+ipv6_address: "2001:db8:2323:200c::1/64"  
+bgp_as: 23

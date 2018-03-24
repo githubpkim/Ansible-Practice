@@ -1,0 +1,4 @@
+- nxos_config:
+     provider: "{{ creds_nxapi }}"
+     lines: "{{ global_config }}"
+  tags: nxos

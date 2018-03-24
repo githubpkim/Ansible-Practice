@@ -1,0 +1,12 @@
+---
+- name: With Testing
+  hosts: local
+  vars:
+    my_files:  
+      - ~/ansible-hosts
+      - ./my_vars.yml
+  tasks:
+    - name: Test with_files
+      debug:
+        msg: "{{ item }}"  # display the file contents
+      with_file: "{{ my_files }}" # an item is a file

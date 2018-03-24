@@ -1,0 +1,17 @@
+---
+
+- name: Data Structure Conversion
+  hosts: pynet-sw8
+  vars:
+    temp_file: "./Templates/mac_lookup.j2"
+  tasks:
+    - name: Napalm_get_facts running
+      napalm_get_facts:
+         provider: "{{eapi_creds}}"
+         dev_os: 'eos'
+         filter:
+           - "mac_address_table"
+
+    - name: Lookup the output via template
+      debug:
+         msg: "{{lookup('template',temp_file)|from_yaml}}"

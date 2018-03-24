@@ -1,0 +1,37 @@
+---
+
+- name: Exec 3
+  hosts: nxos
+  tasks:
+    - name: napalm_install_config 
+      napalm_install_config:
+        provider: "{{nx_provider}}"
+        archive_file: "./ARCHIVE/backup_{{inventory_hostname}}.txt"
+        config_file: "./CONF/bgp_{{inventory_hostname}}.txt"
+        diff_file: "./DIFF/diff_{{inventory_hostname}}.txt"
+        replace_config: False
+        commit_changes: True
+      tags:
+        - bgp_config
+  
+    - name: check the bgp neighbor
+      napalm_get_facts:
+        provider: "{{nx_provider}}"
+        filter:
+           "bgp_neighbors" 
+      tags:
+        - bgp_check 
+
+    - name: Get the BGP Peers # set variable for bgp peers. This is pre-process to get "is_up" status
+      set_fact:
+        bgp_peer: "{{napalm_bgp_neighbors['global']['peers']}}" #1)create a variable of bgp peer
+      tags:
+        - bgp_check 
+
+    - name: Check the BGP status 
+      assert:
+        that: "bgp_peer[item]['is_up'] == true" #3) get variable from 1) and the ip from 2) to get the target status
+        msg: "BGP is not up with {{item}} at {{inventory_hostname}}"
+      with_items: "{{bgp_peer}}" #2) get ip peer ip address
+      tags:
+        - bgp_check 

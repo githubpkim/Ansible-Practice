@@ -1,0 +1,19 @@
+---
+- name: debug test for all machines
+  hosts: cisco
+  vars:
+    - ntp_server1: 20.20.20.20
+    - ntp_server2: 20.20.20.30
+  tasks:
+    - name: show Cisco IP address 
+      debug:
+         msg: "{{ansible_host}}"
+      #when: ansible_host == 184.105.247.70
+    - name: show LOCAL AS NUM
+      debug: msg="{{local_as_number}}"
+    - name: show REMOTE AS  NUM
+      debug: msg="{{remote_as_number}}"
+    - name: show ntp_server info
+      debug: msg="{{ntp_server1}}"
+    - name: show ntp_server info
+      debug: msg="{{ntp_server2}}"

@@ -1,0 +1,46 @@
+---
+
+- name: IOS FACT Exercise
+  hosts: cisco
+  vars:
+     creds:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+     
+  tasks:
+     - name: IOS FACTS
+       ios_facts:
+          provider: "{{ creds }}"
+       tags: 
+          - 2a
+          - 2b
+          - 2c
+          - 2d
+     
+     - name: DISPLAY 10.220.88.21 only
+       debug: 
+          var: ansible_net_all_ipv4_addresses
+       #when: ansible_net_all_ipv4_addresses[0] == '10.220.88.21'
+       when: "'10.220.88.21' in  ansible_net_all_ipv4_addresses[0]"
+       tags: 2a
+
+     - name: DISPLAY INTERFACES ONLY
+       debug: 
+          msg: "{{item.key}}"
+       with_dict: "{{ ansible_net_interfaces }}"
+       tags: 2b
+
+     - name: DISPLAY INTERFACES UP Status
+       debug: 
+          msg: "{{item.key}}"
+       with_dict: "{{ ansible_net_interfaces }}"
+       when: " item.value.lineprotocol == 'up ' "
+       tags: 2c
+
+     - name: DISPLAY INTERFACES UP Status
+       debug: 
+          msg: "{{ ansible_net_hostname }} is cisco  model 881"
+       with_items: "{{ ansible_net_model }}"
+       when: " '881' is in item "
+       tags: 2d

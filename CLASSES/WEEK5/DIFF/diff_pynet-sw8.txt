@@ -1,0 +1,12 @@
+@@ -49,6 +49,11 @@
+ !
+ interface Ethernet7
+ !
++interface Loopback77
++   ip address 10.1.77.1/32
++   ipv6 enable
++   ipv6 address 2001:db8:82::11/64
++!
+ interface Management1
+    shutdown
+ !

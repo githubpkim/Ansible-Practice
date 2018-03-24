@@ -1,0 +1,26 @@
+---
+ssh_provider:
+  transport: cli
+  username: "{{username}}"
+  password: "{{password}}"
+
+nxapi_provider:
+  transport: nxapi
+  username: "{{username}}"
+  password: "{{password}}"
+
+common_vlans: # value of common_vlans is a list and each list element(=item) has dictionaries
+    - vlan_id: 301
+      admin_state: up
+      name: blue
+    - vlan_id: 302
+      admin_state: up
+      name: red
+    - vlan_id: 303
+      admin_state: up
+      name: green
+all_vlans: "{{common_vlans}}+{{unique_vlans}}" #in python, list_1+list_2 =>[list_1,list_2]
+
+snmp_location:
+     location: SJC2
+     state: present

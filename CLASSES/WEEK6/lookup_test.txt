@@ -1,0 +1,8 @@
+int eth2/1
+Hello Today, I am working from home.
+Since Dan and Kanak are WFH, there is no reason to be in the office alone.
+
+I am trying to be more devops level engineer wuth programing and network skill together.
+Can I do it?
+
+Yes, you can do it.

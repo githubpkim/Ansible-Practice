@@ -1,0 +1,12 @@
+---
+- name: debug test for all machines
+  hosts: cisco
+  tasks:
+#    - name: check the 
+#      shell: /usr/bin/uptime 
+#      register: result
+#    - name: show the output of task above
+#      debug: 
+#        var: result
+    - name: show LOCAL AS NUM
+      debug: msg="{{local_as_number}}"

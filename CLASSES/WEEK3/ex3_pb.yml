@@ -1,0 +1,15 @@
+---
+
+- name: NXOS Exercise-1
+  hosts: nxos  #w/o with_items, all the hosts defined at nxos will be processed one by one
+  tasks:
+     - name: Ping NXOS servers
+       nxos_ping:
+          provider: "{{ssh_provider}}" 
+          dest: "{{item.other_end_ip}}"
+          vrf: default
+          #host: "{{item.addr}}"
+       with_items: "{{ip_assignment}}" 
+       when: item.version == 'v4'
+       tags:
+          - 1a
